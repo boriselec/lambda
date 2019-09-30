@@ -12,7 +12,7 @@ public class Lambda implements Term {
     }
 
     public Term apply(Term param) {
-        return definition.substitute(this.param, param);
+        return definition.substitute(this.param, param).reduce();
     }
 
     public Term reduce() {
