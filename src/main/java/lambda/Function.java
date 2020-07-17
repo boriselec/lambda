@@ -5,16 +5,16 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 public class Function<T extends Variable> implements Expression {
-    private final T arg;
+    private final T param;
     private final Expression body;
 
-    public Function(T arg, Expression body) {
-        this.arg = requireNonNull(arg);
+    public Function(T param, Expression body) {
+        this.param = requireNonNull(param);
         this.body = requireNonNull(body);
     }
 
-    public T getArg() {
-        return arg;
+    public T getParam() {
+        return param;
     }
 
     public Expression getBody() {
@@ -26,17 +26,17 @@ public class Function<T extends Variable> implements Expression {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Function function = (Function) o;
-        return Objects.equals(arg, function.arg) &&
+        return Objects.equals(param, function.param) &&
             Objects.equals(body, function.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(arg, body);
+        return Objects.hash(param, body);
     }
 
     @Override
     public String toString() {
-        return "λ" + arg + "." + body;
+        return "λ" + param + "." + body;
     }
 }

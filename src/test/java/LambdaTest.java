@@ -1,6 +1,10 @@
+import lambda.Application;
+import lambda.Expression;
 import lambda.Function;
-import lambda.aux.Normalizator;
 import lambda.RawVariable;
+import lambda.Variable;
+import lambda.aux.Normalizator;
+import lambda.aux.Reducer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,5 +32,20 @@ public class LambdaTest {
 
         assertTrue(f1.alphaEquivalent(f2));
         assertFalse(f1.alphaEquivalent(f3));
+    }
+
+    @Test
+    void testReduction() {
+        Function i = new Function<>(new RawVariable("x"), new RawVariable("x"));
+        Application application = new Normalizator().normalize(new Application(i, new RawVariable("y")));
+        Variable v = new Normalizator().normalize(new RawVariable("v"));
+
+        Expression reducedToVar = new Reducer().reduce(application);
+        Expression reducedIdentity = new Reducer().reduce(new Normalizator().normalize(new Application(i, i)));
+
+        assertTrue(reducedToVar.alphaEquivalent(v),
+            "(λx.x)y == v");
+        assertTrue(reducedIdentity.alphaEquivalent(new Normalizator().normalize(i)),
+            "(λx.x)(λx.x) == λx.x");
     }
 }
