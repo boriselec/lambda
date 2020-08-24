@@ -12,7 +12,7 @@ public class Reducer {
     public Expression reduce(Expression expression) {
         Expression reduced = reduceStep(expression);
         if (reduced.alphaEquivalent(expression)) {
-            return new Normalizator().normalize(expression);
+            return reduced;
         } else {
             return reduce(reduced);
         }
@@ -27,11 +27,11 @@ public class Reducer {
                 Function function = (Function) application.getLeft();
                 return rename(function.getBody(), function.getParam(), application.getRight());
             } else {
-                return new Application(application.getLeft(), application.getRight());
+                return new Application(reduce(application.getLeft()), reduce(application.getRight()));
             }
         } else if (expression instanceof Function) {
             Function function = (Function) expression;
-            return new Function<>(function.getParam(), reduceStep(function.getBody()));
+            return new Function<>(function.getParam(), reduce(function.getBody()));
         } else {
             throw new IllegalArgumentException();
         }
